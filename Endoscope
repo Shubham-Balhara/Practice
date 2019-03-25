@@ -1,0 +1,149 @@
+#Question
+Company S has developed an industrial endoscope available to explore inner part of the decrepit water pipes.
+It is possible to explore the inner part of the pipes putting the endoscope in a certain part of the pipe. 
+The endoscope can be moved in the pipe only. Meanwhile, when the pipes are connected to each other, if the length of the endoscope 
+is long enough to explore ,then it is able to inspect the connected pipes. However, we cannot observe every pipe because the length 
+of endoscope is limited.
+
+When the map of the ground water pipe, the location where the endoscope to out in, and the length of the endoscope is given, calculate 
+the number of pipe which are available to explore. Length of endoscope means the range upto which endoscope can explore. There are seven
+kind of pipes, and description for each pipe are shown below:
+
+S.No	Pipe	Connected to
+1		Up, Down, Left, Right
+2		Up, Down
+3		Left, Right
+4		Up, Right
+5		Down, Right
+6		Down, Left
+7		Up, Left
+When the map of the ground water pipe, the location where the endoscope to out in, and the length of the endoscope is given, calculate 
+the number of pipe which are available to explore. Length of endoscope means the range upto which endoscope can explore.
+
+Input
+In the first line, T, the number of total test cases is given. From the second line, T test cases are given. In the first line of each 
+test case, N, the height of the map of the ground water pipes, M, the width, R, the vertical location of the water pipe where to put in
+the endoscope, C, the horizontal location of it, and the length of the endoscope L are given. In the following N lines information of
+the map of ground water pipe is given. Each line has M numbers. Each number (from 1 to 7) means the type of water pipe for that point. 
+0 means there is no water pipe buried in that place.
+
+Output
+Print the respective answer for T test cases in total for T lines. The answer is the number of water pipes which is available to
+observe using the endoscope.
+
+Constraints
+1≤ T ≤100
+
+1≤ N, M ≤50
+
+0≤ X < N
+
+0≤ Y < M
+
+1≤ L ≤ 20
+
+----------------------------------------Code ----------------------------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int x,y,len;
+};
+
+bool checkUp(int val){
+    if(val==1||val==2||val==4||val==7)
+        return true;
+    return false;
+}
+bool checkDown(int val){
+    if(val==1||val==2||val==5||val==6)
+        return true;
+    return false;
+}
+bool checkLeft(int val){
+    if(val==1||val==3||val==6||val==7)
+        return true;
+    return false;
+}
+bool checkRight(int val){
+    if(val==1||val==3||val==4||val==5)
+        return true;
+    return false;
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n,m,x,y,length;
+        cin>>n>>m>>x>>y>>length;
+        int a[n+1][m+1];
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+               cin>>a[i][j];
+            }
+        }
+        if(a[x][y]==0){
+            cout<<0<<endl;
+        }else if(length == 1){
+            cout<<1<<endl;
+        }else{
+            int vis[n+1][m+1] = {0};
+            node q[1000];
+            node p;
+            p.x = x;
+            p.y = y;
+            p.len = 1;
+            vis[x][y] = true;
+            int start=0,end=0,count=0;
+            q[end++] = p;
+            while(start!=end){
+                p = q[start];
+                start++;count++;
+                if(p.len == length){
+                    continue;
+                }
+                if(checkUp(a[p.x][p.y])){
+                    if(p.x-1>0&&a[p.x-1][p.y]!=0&&vis[p.x-1][p.y]==false){
+                        vis[p.x-1][p.y]=true;
+                        node x;
+                        x.x = p.x-1;
+                        x.y = p.y;
+                        x.len = p.len+1;
+                        q[end++] = x;
+                    }
+                }
+                if(checkDown(a[p.x][p.y])){
+                    if(p.x+1<=n&&a[p.x+1][p.y]!=0&&vis[p.x+1][p.y]==false){
+                        vis[p.x+1][p.y]=true;
+                        node x;
+                        x.x = p.x+1;
+                        x.y = p.y;
+                        x.len = p.len+1;
+                        q[end++] = x;
+                    }
+                }
+                if(checkLeft(a[p.x][p.y])){
+                    if(p.y-1>0&&a[p.x][p.y-1]!=0&&vis[p.x][p.y-1]==false){
+                        vis[p.x][p.y-1]=true;
+                        node x;
+                        x.x = p.x;
+                        x.y = p.y-1;
+                        x.len = p.len+1;
+                        q[end++] = x;
+                    }
+                }
+                if(checkRight(a[p.x][p.y])){
+                    if(p.y+1<=m&&a[p.x][p.y+1]!=0&&vis[p.x][p.y+1]==false){
+                        vis[p.x][p.y+1]=true;
+                        node x;
+                        x.x = p.x;
+                        x.y = p.y+1;
+                        x.len = p.len+1;
+                        q[end++] = x;
+                    }
+                }
+            }
+            cout<<count<<endl;
+        }
+    }
+}

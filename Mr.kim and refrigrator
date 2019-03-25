@@ -47,3 +47,46 @@ Output (10 lines in total)
 
 #3 366
 ----------------------------------------------------Code-----------------------------------------------------
+
+#include<bits/stdc++.h>
+using namespace std;
+int ans = -1;
+
+struct node{
+    int x,y;
+};
+
+void bfs(node a[],int n,int count,int sum,bool vis[],int index){
+    count++;
+    if(count == n-1){
+        sum += abs(a[index].x-a[n-1].x)+abs(a[index].y-a[n-1].y);
+        if(ans==-1 || ans>sum)
+            ans = sum;
+        return;
+    }
+    vis[index] = true;
+    for(int i=1;i<n-1;i++){
+        if(vis[i]==false){
+            int t = abs(a[index].x-a[i].x)+abs(a[index].y-a[i].y);
+            bfs(a,n,count,sum+t,vis,i);
+        }
+    }
+    vis[index] = false;
+}
+
+int main(){
+    int n;
+    cin>>n;
+    n += 2;
+    node a[n],home,office;
+    cin>>home.x>>home.y>>office.x>>office.y;
+    for(int i=1;i<n-1;i++){
+        cin>>a[i].x>>a[i].y;
+    }
+    a[0] = home;
+    a[n-1] = office;
+    bool vis[n] = {false};
+    bfs(a,n,0,0,vis,0);
+    cout<<ans<<endl;
+}
+

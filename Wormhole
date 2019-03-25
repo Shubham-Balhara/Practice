@@ -1,0 +1,110 @@
+----------------------------------------Question-----------------------------------------------
+There is one spaceship. X and Y co-odinate of source of spaceship and destination spaceship is given. 
+There are N number of warmholes; each warmhole has 5 values. First 2 values are starting co-ordinate of warmhole and after that value no.
+3 and 4 represents ending co-ordinate of warmhole and last 5th value is represents cost to pass through this warmhole.
+Now these warmholes are bi-directional. Now the to go from (x1,y1) to (x2,y2) is abs(x1-x2)+abs(y1-y2).
+The main problem here is to find minimum distance to reach spaceship from source to destination co-ordinate using any number of warm-hole. 
+It is ok if you wont use any warmhole.
+----------------------------------------Code---------------------------------------------------------------------
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct wormhole{
+    int x,y,x1,y1,cost;
+};
+
+int min(int a,int b){
+    return (a<b)?a:b;
+}
+
+int abs(int x){
+    return x>0?x:-x;
+}
+
+int minimum(int dist[],bool vis[],int n){
+    int num = 99999,index;
+    for(int i=0;i<n;i++){
+        if(vis[i]==false && dist[i]<=num){
+            num = dist[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void dijkestra(int a[][50],int n){
+    int dist[n];
+    bool vis[n];
+    for(int i=0;i<n;i++){
+        dist[i] = 99999;
+        vis[i] = false;
+    }
+    dist[0] = 0;
+    for(int i=0;i<n;i++){
+        int node = minimum(dist,vis,n);
+        vis[node] = true;
+        for(int j=0;j<n;j++){
+            if(!vis[j] && a[node][j] != 0 && dist[node]+a[node][j]<dist[j]){
+                dist[j] = dist[node]+a[node][j];
+            }
+        }
+    }
+    //for(int i=0;i<n;i++)
+        cout<<dist[n-1]<<endl;
+}
+
+int main(){
+    int sx,sy,dx,dy;
+    cin>>sx>>sy>>dx>>dy;
+    int n;
+    cin>>n;
+    wormhole a[n];
+    for(int i=0;i<n;i++){
+        cin>>a[i].x>>a[i].y>>a[i].x1>>a[i].y1>>a[i].cost;
+    }
+    int graph[50][50] = {0};
+    for(int i=0;i<n;i++){
+        int sd,sd1,ed,ed1,dd;
+        sd = abs(a[i].x-sx)+abs(a[i].y-sy);
+        sd1 = abs(a[i].x1-sx)+abs(a[i].y1-sy);
+        ed = abs(a[i].x-dx)+abs(a[i].y-dy);
+        ed1 = abs(a[i].x1-dx)+abs(a[i].y1-dy);
+        dd = min((abs(a[i].x-a[i].x1)+abs(a[i].y-a[i].y1)),a[i].cost);
+        graph[(2*i)+1][(2*i)+2] = dd;
+        graph[(2*i)+2][(2*i)+1] = dd;
+        graph[0][(2*i)+1] = sd;
+        graph[0][(2*i)+2] = sd1;
+        graph[(2*n)+1][(2*i)+1] = ed;
+        graph[(2*n)+1][(2*i)+2] = ed1;
+        graph[(2*i)+1][0] = sd;
+        graph[(2*i)+2][0] = sd1;
+        graph[(2*i)+1][(2*n)+1] = ed;
+        graph[(2*i)+2][(2*n)+1] = ed1;
+    }
+    dijkestra(graph,(2*n+2));
+}
+
+----------------------------------Test Cases-------------------------------------
+0 0 100 100 
+3
+2 3 50 50 5
+60 55 90 92 10
+5 5 130 110 12
+ans = 62
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

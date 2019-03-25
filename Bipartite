@@ -1,0 +1,72 @@
+--------------------------------Question------------------------------------------------------
+
+Given a graph print either of the set of the vertices that are colored with the same color. 
+And if the graph is not bipartite print “-1”. Test cases also included the cases when a graph is not connected.
+
+---------------------------------------------Code ----------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isBipartite(int n,int i,int graph[][100],int color[]){
+    bool flag = true;
+    for(int j=0;j<n;j++){
+        if(graph[i][j] == 1){
+            if(color[j] == -1){
+                color[j] = 1-color[i];
+                flag = flag & isBipartite(n,j,graph,color);
+            }else if(color[j] == color[i]){
+                return false;
+            }
+        }
+    }
+    return flag;
+}
+
+int main(){
+    int n;
+    cin>>n;
+    int graph[100][100];
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            cin>>graph[i][j];
+    int color[n];
+    for(int i=0;i<n;i++)
+        color[i] = -1;
+    for(int i=0;i<n;i++){
+        if(color[i]==-1){
+            color[i] = 0;
+            bool ans = isBipartite(n,i,graph,color);
+            if(ans==false){
+                cout<<-1<<endl;
+                return 0;
+            }
+        }
+    }
+    for(int i=0;i<n;i++)
+        if(color[i]==0)
+            cout<<i<<" ";
+    cout<<endl;
+}
+
+/*
+6
+0 1 0 0 0 1
+1 0 1 0 0 0
+0 1 0 1 0 0
+0 0 1 0 1 0
+0 0 0 1 0 1
+1 0 0 0 1 0
+
+5
+0 1 0 0 1
+1 0 1 0 0
+0 1 0 1 0
+0 0 1 0 1
+1 0 0 1 0
+
+4
+0 1 0 1
+1 0 1 0
+0 1 0 1
+1 0 1 0
+*/

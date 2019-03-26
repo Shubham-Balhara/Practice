@@ -1,0 +1,114 @@
+--------------------------question---------------------------------------------------------------------
+A Research team want to establish a research center in a region where they found some rare-elements.
+They want to make it closest to all the rare-elements as close as possible so that they can reduce overall cost of research over there.
+It is given that all the rare-element’s location is connected by roads.It is also given that Research Center can only be build on road.
+Team decided to assign this task to a coder.If you feel you have that much potential.
+Here is the Task :- Find the shortest of the longest distance of research center from given locations of rare-elements.
+locations are given in the matrix cell form where 1 represents roads and 0 no road.. number of rare-element and their location was also 
+given(number<=5) and order of square matrix was less than equal to (20).
+------------------------------------------------code----------------------------------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+int ans = -1;
+
+struct node{
+    int x,y,d;
+};
+
+int bfs(int a[][21],int i,int j,int n,int rare){
+    node p;
+    p.x = i;
+    p.y = j;
+    p.d = 0;
+    bool vis[21][21] = {false};
+    int dist = 0;
+    node q[1000];
+    vis[i][j] = true;
+    int start=0,end=0,count=0;
+    q[end++] = p;
+    while(start!=end){
+        p = q[start++];
+        if(a[p.x][p.y]==2){
+            count++;
+            if(dist<p.d){
+                //cout<<"endter"<<p.d<<" - ";
+                dist = p.d;
+                //cout<<dist<<endl;
+            }
+        }
+        if(p.x+1<n && vis[p.x+1][p.y]==false && a[p.x+1][p.y]!=0){
+            vis[p.x+1][p.y]=true;
+            node x;
+            x.x = p.x+1;
+            x.y = p.y;
+            x.d = p.d+1;
+            q[end++] = x;
+        }
+        if(p.x-1>=0 && vis[p.x-1][p.y]==false && a[p.x-1][p.y]!=0){
+            vis[p.x-1][p.y]=true;
+            node x;
+            x.x = p.x-1;
+            x.y = p.y;
+            x.d = p.d+1;
+            q[end++] = x;
+        }
+        if(p.y+1<n && vis[p.x][p.y+1]==false && a[p.x][p.y+1]!=0){
+            vis[p.x][p.y+1]=true;
+            node x;
+            x.x = p.x;
+            x.y = p.y+1;
+            x.d = p.d+1;
+            q[end++] = x;
+        }
+        if(p.y-1>=0 && vis[p.x][p.y-1]==false && a[p.x][p.y-1]!=0){
+            vis[p.x][p.y-1]=true;
+            node x;
+            x.x = p.x;
+            x.y = p.y-1;
+            x.d = p.d+1;
+            q[end++] = x;
+        }
+    }
+    //cout<<((count==rare)?dist:99999)<<" x: "<<i<<" y: "<<j<<endl;
+    return (count==rare)?dist:99999;
+}
+
+int main(){
+    int n;
+    cin>>n;
+    int a[21][21];
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            cin>>a[i][j];
+
+    int rare;
+    cin>>rare;
+    int x,y;
+    for(int i=0;i<rare;i++){
+        cin>>x>>y;
+        a[x][y] = 2;
+    }
+    int ans = -1;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(a[i][j]!=0){
+                int dist = bfs(a,i,j,n,rare);
+                ans = (ans==-1 || ans>dist)?dist:ans;
+            }
+        }
+    }
+    cout<<ans<<endl;
+}
+
+-------------------------------------------------------test case--------------------------------------------------
+5
+1 1 1 0 0
+1 1 1 1 0
+0 0 1 0 0
+1 1 1 1 1
+1 0 1 0 1
+3
+0 0
+2 4
+3 1
+

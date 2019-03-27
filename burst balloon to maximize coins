@@ -1,0 +1,82 @@
+------------------------------------------------Question----------------------------------------------------
+We have been given N balloons, each with a number of coins associated with it. On bursting a balloon i,
+the number of coins gained is equal to A[i-1]*A[i]*A[i+1]. Also, balloons i-1 and i+1 now become adjacent. 
+Find the maximum possible profit earned after bursting all the balloons. Assume an extra 1 at each boundary.
+
+Examples:
+
+Input : 5, 10
+Output : 60
+Explanation - First Burst 5, Coins = 1*5*10
+              Then burst 10, Coins+= 1*10*1
+              Total = 60
+
+Input : 1, 2, 3, 4, 5
+Output : 110
+
+----------------------------------------------------Code---------------------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int maxCoinsBottomUpDp(int nums[], int n)
+{
+        int T[n][n];
+
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                T[i][j]=0;
+            }
+        }
+
+        for (int len = 1; len <=n; len++)
+            {
+            for (int i = 0; i <=n-len; i++)
+            {
+                int j = i + len - 1;
+                for (int k = i; k <=j; k++)
+                {
+                    int leftValue = 1;
+                    int rightValue = 1;
+                    if (i != 0) {
+                        leftValue = nums[i-1];
+                    }
+                    if (j != n-1) {
+                        rightValue = nums[j+1];
+                    }
+                    int before = 0;
+                    int after = 0;
+                    if (i != k) {
+                        before = T[i][k-1];
+                    }
+                    if (j != k) {
+                        after = T[k+1][j];
+                    }
+                    T[i][j] = max(leftValue *  rightValue + before + after + nums[k], T[i][j]);
+                }
+            }
+        }
+        return T[0][n-1];
+    }
+
+int main()
+{
+    int n;
+    cin>>n;
+
+    int arr[n];
+    for(int i=0; i<n; i++)
+    {
+        cin>>arr[i];
+    }
+
+    cout<<maxCoinsBottomUpDp(arr,n)<<endl;
+    return 0;
+}
+
+-------------------------------------------------------------Test Case -------------------------------------------------
+4
+3 1 5 8
+ans = 167

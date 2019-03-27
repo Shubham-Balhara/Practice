@@ -1,0 +1,62 @@
+-----------------------------------------------Question------------------------------------------------------------
+There is an island surrounded by oil mines. You will be given n companies and m oil mines having values. 
+You have to distribute the mines to "n" companies in fair manner.
+Remember the companies can have oil mines adjacent to each other and not in between of each others.
+After distributing them compute the difference of oil mines from the company getting highest and company getting lowest.
+This number should be minimum.(then only the distribution can be termed as fair).
+
+  Example
+  Input
+  2
+  2 4
+  6 13 10 2
+  2 4
+  6 10 13 2
+
+  output
+  5
+  1
+  ----------------------------------------------------Code---------------------------------------------------------------------
+  #include<bits/stdc++.h>
+using namespace std;
+
+void dfs(int i,int mn,int mx,int sum,int company,int a[],bool vis[],int n,int m,int &ans){
+    if(company>n)
+        return;
+    int nmn = min(mn,sum);
+    int nmx = max(mx,sum);
+    if(vis[i]==true){
+        if(company==n-1){
+            ans = min(ans,nmx-nmn);
+        }
+        return;
+    }
+    vis[i] = true;
+    int j = (i+1)%m;
+    dfs(j,mn,mx,sum+a[i],company,a,vis,n,m,ans);
+    dfs(j,nmn,nmx,a[i],company+1,a,vis,n,m,ans);
+    vis[i] = false;
+    return;
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        int a[m];
+        bool vis[m] = {false};
+        for(int i=0;i<m;i++)
+            cin>>a[i];
+        if(n>m){
+            cout<<-1<<endl;
+        }else{
+            int ans = 99999;
+            for(int i=0;i<m;i++){
+                dfs(i,1000,-1000,0,0,a,vis,n,m,ans);
+            }
+            cout<<ans<<endl;
+        }
+    }
+}

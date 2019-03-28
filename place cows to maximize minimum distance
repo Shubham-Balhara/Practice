@@ -1,0 +1,65 @@
+--------------------------------------------------Question-------------------------------------------------------
+You are given an array of integers which represents positions available and an integer c(cows).
+Now you have to choose c positions such that minimum difference between cows is maximized.
+For example,
+1 3 5 8 10
+c=3
+output: 4
+1 5 10
+
+--------------------------------------------------Code--------------------------------------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+
+bool feasible(int num,int a[],int n,int k){
+    int pos = a[0];
+    int cow = 1;
+    for(int i=0;i<n;i++){
+        if(a[i]-pos>=num){
+            pos = a[i];
+            cow++;
+        }
+        if(cow == k){
+            return true;
+        }
+    }
+    return false;
+}
+
+int binarySearch(int a[],int n,int k){
+    sort(a,a+n);
+    int start=a[0],end=a[n-1],ans=-1;
+    while(start<end){
+        int mid = (start+end)/2;
+        if(feasible(mid,a,n,k)==true){
+            ans = max(ans,mid);
+            start = mid+1;
+        }
+        else{
+            end = mid;
+        }
+    }
+    return ans;
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n,k;
+        cin>>n>>k;
+        int a[n];
+        for(int i=0;i<n;i++){
+            cin>>a[i];
+        }
+        cout<<binarySearch(a,n,k)<<endl;
+    }
+}
+
+----------------------------------------------------Test case----------------------------------------------------
+5 3
+1 2 8 4 9
+ans = 3
+6 3
+1 2 7 5 11 12
+ans = 5

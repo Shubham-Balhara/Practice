@@ -1,0 +1,99 @@
+----------------------------------------------------------Question----------------------------------------------------------------
+Given a boolean matrix mat[M][N] of size M X N, modify it such that if a matrix cell mat[i][j] is 1 (or true) then make all the cells of ith row and jth column as 1.
+Example 1
+The matrix
+1 0
+0 0
+should be changed to following
+1 1
+1 0
+
+Example 2
+The matrix
+0 0 0
+0 0 1
+should be changed to following
+0 0 1
+1 1 1
+
+Example 3
+The matrix
+1 0 0 1
+0 0 1 0
+0 0 0 0
+should be changed to following
+1 1 1 1
+1 1 1 1
+1 0 1 1
+-----------------------------------------------------------code---------------------------------------------------------
+#include<bits/stdc++.h>
+using namespace std;
+int n,m,a[1000][1000];
+
+void convert(int n, int m,int a[][20]){
+    int r=0,c=0;
+    for(int i=0;i<n;i++){
+        if(a[i][0]==1){
+            c=1;
+            break;
+        }
+    }
+    for(int i=0;i<m;i++){
+        if(a[0][i]==1){
+            r=1;
+            break;
+        }
+    }
+    for(int i=1;i<n;i++){
+        for(int j=1;j<m;j++){
+            if(a[i][j]==1){
+                a[i][0] = 1;
+                a[0][j] = 1;
+            }
+        }
+    }
+    for(int i=1;i<n;i++){
+        if(a[i][0]==1){
+            for(int j=0;j<m;j++){
+                a[i][j]=1;
+            }
+        }
+    }
+    for(int i=1;i<m;i++){
+        if(a[0][i]==1){
+            for(int j=0;j<n;j++){
+                a[j][i]=1;
+            }
+        }
+    }
+    if(r==1){
+        for(int i=0;i<m;i++){
+            a[0][i] = 1;
+        }
+    }
+    if(c==1){
+        for(int i=0;i<n;i++){
+            a[i][0] = 1;
+        }
+    }
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        cin>>n>>m;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                cin>>a[i][j];
+            }
+        }
+        convert(n,m,a);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                cout<<a[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+}

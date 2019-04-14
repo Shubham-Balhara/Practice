@@ -1,0 +1,25 @@
+------------------------------------------jtg question------------------------------------------------------
+1. you are given an array of integer. your task is to output the length of largest gp present in the series.
+  e.g., input: 1,2,4,7,14,28,56,85
+      output: 4
+     complete the function: int largetGP(int arr[],int length)
+     solution should be in o(n) time complexity and o(1) space complexity you can traverse the array only once.
+     
+2. you are given a tree you need to connect all node at same leve using neighbour pointer
+  struct Node{
+    int val;
+    Node *left,*right,*neighbour;
+   }
+   eg.,                NULL <- 1
+                             /   \
+                   NULL <- 2   <- 3
+                         /   \      \ 
+               NULL <- 4   <- 5  <-- 6
+  complete the function: void connectNeighbour(Node *root)
+ 
+3. you are given a linked list containing positive and negative integers sorted in ascending order based on their absolute values.
+  you need to sort the list in decending order based on their actual values.
+  e.g.,    input: 1 -> 2 -> -3 -> -4 -> 5
+          output: 5 -> 2 -> 1 -> -3 -> -4
+        complete the function: Node *sortList(Node *head)
+       solution should be in o(n) time complexity and o(1) space complexity you can traverse the array only once.

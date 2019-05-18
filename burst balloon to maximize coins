@@ -54,7 +54,7 @@ int maxCoinsBottomUpDp(int nums[], int n)
                     if (j != k) {
                         after = T[k+1][j];
                     }
-                    T[i][j] = max(leftValue *  rightValue + before + after + nums[k], T[i][j]);
+                    T[i][j] = max(leftValue *  rightValue * nums[k] + before + after, T[i][j]);
                 }
             }
         }

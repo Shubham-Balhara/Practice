@@ -1,0 +1,60 @@
+----------------------------------------------question ----------------------------------
+A Doctor travels from a division to other division where divisions are connected like a graph(directed graph) and the edge weights
+are the probabilities of the doctor going from that division to other connected division but the doctor stays 10mins at each division
+now there will be given time and had to find the division in which he will be staying by that time and is determined by finding division
+which has high probability.
+Input is number of test cases followed by the number of nodes, edges, time after which we need to find the division in which he will be
+there, the edges starting point, end point, probability.
+Note: If he reaches a point where there are no further nodes then he leaves the lab after 10 mins and the traveling time is not
+considered and during that 10min at 10th min he will be in next division, so be careful
+
+-------------------------------code ---------------------------------------------------------
+#include <iostream>
+using namespace std;
+
+int calprob(int from[],int to[],int prob,int nodes,int edges,int moves){
+    float dp[nodes+1][moves+1];
+    for(int i=1;i<=nodes;i++){
+        for(int j=1;j<=moves;j++){
+            dp[i][j] = 0;
+        }
+    }
+    dp[1][0] = 1;
+    for(int i=1;i<=moves;i++){
+       for(int k=1;k<=nodes;k++){
+           float temp = 0;
+            for(int j=0;j<=edges;j++){
+                if(to[j]==k){
+                    temp+=dp[from[j]][i-1]*prob[j];
+                }
+            }
+            dp[k][i] = temp;
+       }
+    }
+    int maxprob = dp[0][moves],index=0;
+    for(int i=1;i<=nodes;i++){
+        maxprob = (maxprob<dp[i][moves]?dp[i][moves]:maxprob);
+        index = i;
+    }
+    return index;
+}
+
+int main() {
+	int t;
+	cin>>t;
+	while(t--){
+	    int nodes,edges,duration;
+	    cin>>nodes>>edges>>duration;
+	    int moves = duration/10;
+	    int from[edges],to[edges];
+	    float prob[edges];
+	    for(int i=0;i<edges;i++){
+	        cin>>from[i]>>to[i]>>prob[i];
+	    }
+	    int ans = 0;
+	    ans = calprob();
+	    cout<<ans<<endl;
+	}
+	return 0;
+}
+

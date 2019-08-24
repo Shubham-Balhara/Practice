@@ -12,29 +12,32 @@ considered and during that 10min at 10th min he will be in next division, so be 
 #include <iostream>
 using namespace std;
 
-int calprob(int from[],int to[],int prob,int nodes,int edges,int moves){
+int calprob(int from[],int to[],float prob[],int nodes,int edges,int moves){
     float dp[nodes+1][moves+1];
-    for(int i=1;i<=nodes;i++){
-        for(int j=1;j<=moves;j++){
+    for(int i=0;i<=nodes;i++){
+        for(int j=0;j<=moves;j++){
             dp[i][j] = 0;
         }
     }
-    dp[1][0] = 1;
+    dp[0][1] = 1;
     for(int i=1;i<=moves;i++){
        for(int k=1;k<=nodes;k++){
            float temp = 0;
-            for(int j=0;j<=edges;j++){
+            for(int j=0;j<edges;j++){
                 if(to[j]==k){
-                    temp+=dp[from[j]][i-1]*prob[j];
+                    temp+=(dp[i-1][from[j]]*prob[j]);
                 }
             }
-            dp[k][i] = temp;
+            dp[i][k] = temp;
        }
     }
-    int maxprob = dp[0][moves],index=0;
+    float maxprob = dp[moves][0];
+    int index=0;
     for(int i=1;i<=nodes;i++){
-        maxprob = (maxprob<dp[i][moves]?dp[i][moves]:maxprob);
-        index = i;
+        if(maxprob<dp[moves][i]){
+            maxprob = dp[moves][i];
+            index = i;
+        }
     }
     return index;
 }
@@ -51,10 +54,8 @@ int main() {
 	    for(int i=0;i<edges;i++){
 	        cin>>from[i]>>to[i]>>prob[i];
 	    }
-	    int ans = 0;
-	    ans = calprob();
+	    int ans = calprob(from,to,prob,nodes,edges,moves);
 	    cout<<ans<<endl;
 	}
 	return 0;
 }
-

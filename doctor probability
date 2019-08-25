@@ -13,9 +13,9 @@ considered and during that 10min at 10th min he will be in next division, so be 
 using namespace std;
 
 int calprob(int from[],int to[],float prob[],int nodes,int edges,int moves){
-    float dp[nodes+1][moves+1];
-    for(int i=0;i<=nodes;i++){
-        for(int j=0;j<=moves;j++){
+    float dp[moves+1][nodes+1];
+    for(int i=0;i<=moves;i++){
+        for(int j=0;j<=nodes;j++){
             dp[i][j] = 0;
         }
     }
